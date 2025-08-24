@@ -1,13 +1,7 @@
 use bevy::{
-    prelude::*,
-    color::palettes::tailwind,
-    render::{
-        camera::{ClearColorConfig, RenderTarget},
-        render_resource::{
+    camera::{visibility::{Layer, RenderLayers}, ImageRenderTarget, RenderTarget}, color::palettes::tailwind, math::FloatOrd, prelude::*, render::render_resource::{
             Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
-        },
-        view::{Layer, RenderLayers},
-    },
+        }
 };
 use bevy_debug_grid::*;
 use bevy_spectator::*;
@@ -88,7 +82,10 @@ fn setup(
         Camera {
             clear_color: ClearColorConfig::Custom(Color::Srgba(tailwind::GRAY_500)),
             order: -1,
-            target: RenderTarget::Image(top_image_handle.clone()),
+            target: RenderTarget::Image(ImageRenderTarget{
+                    handle: top_image_handle.clone(),
+                    scale_factor: FloatOrd(1.0),
+                }),
             ..default()
         },
         Transform::from_xyz(0.0_f32, 8.0_f32, 0.0_f32).looking_at(Vec3::ZERO, Vec3::Y),
@@ -117,7 +114,10 @@ fn setup(
             Camera {
                 clear_color: ClearColorConfig::Custom(Color::Srgba(tailwind::GRAY_500)),
                 order: -1,
-                target: RenderTarget::Image(bottom_image_handle.clone()),
+                target: RenderTarget::Image(ImageRenderTarget{
+                    handle: bottom_image_handle.clone(),
+                    scale_factor: FloatOrd(1.0),
+                }),
                 ..default()
             },
             Transform::from_xyz(-4.0_f32, 2.0_f32, 4.0_f32).looking_at(Vec3::Y, Vec3::Y),
